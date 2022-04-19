@@ -5,6 +5,7 @@
         class="digit-item"
         v-for="(item) in digitData"
         :key="item.title"
+        :style="{color:item.color}"
       >
         <p class="digit-item-title">{{item.title}}</p>
         <p class="digit-item-number">{{item.number}}</p>
@@ -30,8 +31,8 @@
   </div>
 </template>
 <script>
-import axios from 'axios';
-import ChinaMap from '../../components/ChinaMap.vue'
+// import axios from 'axios';
+import ChinaMap from '../../components/ChinaMap.vue';
 
 export default {
   data() {
@@ -41,7 +42,7 @@ export default {
       lastData: {},
     };
   },
-  components:{
+  components: {
     ChinaMap,
   },
   created() {
@@ -49,40 +50,39 @@ export default {
   },
   methods: {
     // 'https://interface.sina.cn/news/wap/fymap2020_data.d.json'
-    getHeadData() {
-      axios
-        .get('http://localhost:3000/china/map')
-        .then((response) => {
-          if (response.code === 200) {
-            this.total = response.message;
-            this.lastData = this.total[this.total.length - 1];
-            this.digitData.push(
-              {
-                title: '现有确诊',
-                number: this.lastData.confirm_now,
-              },
-              {
-                title: '累计确诊',
-                number: this.lastData.confirmed,
-              },
-              {
-                title: '新增确诊',
-                number: this.lastData.confirm_add,
-              },
-              {
-                title: '累计治愈',
-                number: this.lastData.cured,
-              },
-              {
-                title: '累计死亡',
-                number: this.lastData.died,
-              },
-            );
-          }
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+    async getHeadData() {
+      const res = await this.$axios.get('api/china/total');
+      if (res.code === 200) {
+        this.total = res.message;
+        this.lastData = this.total[this.total.length - 1];
+        this.digitData.push(
+          {
+            title: '现有确诊',
+            number: this.lastData.confirm_now,
+            color:'#ee735f'
+          },
+          {
+            title: '累计确诊',
+            number: this.lastData.confirmed,
+            color:'#d7433c'
+          },
+          {
+            title: '新增确诊',
+            number: this.lastData.confirm_add,
+            color:'#da7352'
+          },
+          {
+            title: '累计治愈',
+            number: this.lastData.cured,
+            color:'#4eabb3'
+          },
+          {
+            title: '累计死亡',
+            number: this.lastData.died,
+            color:'#4e6d9c'
+          },
+        );
+      }
     },
   },
 };
@@ -91,6 +91,7 @@ export default {
 .total {
   padding: 10px;
   .total-digit {
+    width:1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -98,7 +99,7 @@ export default {
       padding: 25px 60px;
       background-color: white;
       box-shadow: 0 0 5px rgb(177, 176, 176);
-      border-radius: 3px;
+      border-radius: 5px;
       .digit-item-title {
         margin-bottom: 15px;
         font-size: 20px;
@@ -118,7 +119,9 @@ export default {
     .diagram-map {
       margin-top: 20px;
       flex: 0 0 48%;
-      border: 1px solid #000;
+      background-color: white;
+      box-shadow: 0 0 5px rgb(177, 176, 176);
+      border-radius: 5px;
     }
   }
 }

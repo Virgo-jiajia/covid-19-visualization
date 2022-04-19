@@ -4,10 +4,21 @@
 <script>
 export default {
   data() {
-     return {}
+     return {
+       shuju:{}
+     }
    },
-   created() {},
-   methods: {}
+   created() {
+     this.getAreaData();
+   },
+   methods: {
+     async getAreaData() {
+      const res = await this.$axios.get('https://diqu.gezhong.vip/api.php');
+      if (res.msg === '查询成功') {
+        // console.log(res.data.highlist);
+      }
+    },
+   }
 }
 </script>
 <style></style>

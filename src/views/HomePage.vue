@@ -74,9 +74,10 @@ export default {
 .main-container {
   width: 100%;
   height: 100vh;
+  overflow: hidden;
   .el-header {
-    background-color: #b3c0d1;
-    color: #333;
+    background-color: #333744;
+    color: white;
     text-align: center;
     line-height: 60px;
   }
@@ -85,17 +86,29 @@ export default {
       background-color: #333744;
       color: #333;
       text-align: left;
-      height: 100vh;
       .el-menu {
         border-right: 0;
       }
     }
     .el-main {
-      background-color: #e9eef3;
-      color: #333;
-      text-align: center;
-      .container{
-        margin-top:20px;
+      background-color: #f9fbfc;
+      padding:0;
+      .el-breadcrumb {
+        width: 100%;
+        padding: 10px;
+        position: fixed;
+        top:60px;
+        background: #f1f3f6;
+        border-bottom: 1px solid #dfe3e9;
+        z-index: 9999;
+      }
+      .container {
+        padding:20px;
+        margin-top: 35px;
+        color: #333;
+        text-align: center;
+        height: calc(100vh - 120px);
+        overflow: scroll;
       }
     }
   }

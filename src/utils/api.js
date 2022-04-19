@@ -11,7 +11,7 @@ axios.interceptors.response.use(success=>{
             return;
         }
         if(success.data.message){
-            Message.success({message:success.data.message})
+            // Message.success({message:success.data.message})
         }
     }
     return success.data;
@@ -36,7 +36,7 @@ axios.interceptors.response.use(success=>{
 
 
 
-let base = '';
+let base = 'http://localhost:8080/api';
 //传送json格式的post请求
 export const postRequest=(url,params)=>{
     return axios({

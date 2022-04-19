@@ -9,8 +9,8 @@ import echarts from 'echarts'
 import 'echarts/map/js/china' 
 Vue.prototype.$echarts = echarts
 
-Vue.prototype.$axios = axios
-axios.defaults.baseURL = ''
+Vue.prototype.$axios = axios;
+axios.defaults.baseUrl = 'http://localhost:8080/api/'
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 import {postRequest} from "./utils/api";
@@ -31,6 +31,6 @@ Vue.use(ElementUI);
 new Vue({
   render: h => h(App),
   router,
-  axios,
   echarts,
 }).$mount('#app')
+
