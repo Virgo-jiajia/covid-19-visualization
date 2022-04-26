@@ -13,26 +13,32 @@
     </div>
     <div class="total-diagram">
       <div class="diagram-map">
-        <china-map></china-map>
+        <china-map ref="map1" :dataList="dataListNow" isNow></china-map>
       </div>
       <div class="diagram-map">
-        <div
-          ref="china_confirm"
-          style="width: 100%;height: 400px"
-        ></div>
+        <china-map ref="map2" :dataList="dataListAdd"></china-map>
       </div>
       <div class="diagram-map">
-        <div
-          ref="china_confirm"
-          style="width: 100%;height: 400px"
-        ></div>
+        <trend-local-add></trend-local-add>
+      </div>
+      <div class="diagram-map">
+        <trend-oversea-add></trend-oversea-add>
+      </div>
+      <div class="diagram-map">
+        <trend-add></trend-add>
+      </div>
+      <div class="diagram-map">
+        <trend-crued-died></trend-crued-died>
       </div>
     </div>
   </div>
 </template>
 <script>
-// import axios from 'axios';
+import TrendLocalAdd from '@/components/TrendLocalAdd.vue';
 import ChinaMap from '../../components/ChinaMap.vue';
+import TrendOverseaAdd from '@/components/TrendOverseaAdd.vue';
+import TrendAdd from '@/components/TrendAdd.vue';
+import TrendCruedDied from '@/components/TrendCruedDied.vue';
 
 export default {
   data() {
@@ -40,13 +46,20 @@ export default {
       digitData: [],
       total: [],
       lastData: {},
+      dataListNow:[],
+      dataListAdd:[],
     };
   },
   components: {
     ChinaMap,
+    TrendLocalAdd,
+    TrendOverseaAdd,
+    TrendAdd,
+    TrendCruedDied,
   },
   created() {
     this.getHeadData();
+    this.getMapData();
   },
   methods: {
     // 'https://interface.sina.cn/news/wap/fymap2020_data.d.json'
@@ -84,6 +97,24 @@ export default {
         );
       }
     },
+    async getMapData() {
+      const res = await this.$axios.get('api/china/map');
+      if (res.code === 200) {
+        let temp = res.message;
+        for (let i = 0; i < temp.length; i++) {
+          this.dataListNow.push({
+            name: temp[i].city,
+            value: temp[i].confirm_now,
+          });
+          this.dataListAdd.push({
+            name: temp[i].city,
+            value: temp[i].confirm_add,
+          });
+        }
+      }
+      this.$refs.map1.initChart();
+      this.$refs.map2.initChart();
+    },
   },
 };
 </script>
@@ -112,6 +143,7 @@ export default {
     }
   }
   .total-diagram {
+    width:1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;

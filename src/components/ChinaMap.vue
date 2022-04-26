@@ -15,56 +15,23 @@ import 'echarts/map/js/china.js';
 export default {
   name: 'ChinaMap',
   data() {
-    return {
-      dataList: [
-        // { name: '南海诸岛', value: 0 },
-        // { name: '北京', value: 54 },
-        // { name: '天津', value: 13 },
-        // { name: '上海', value: 4000 },
-        // { name: '重庆', value: 75 },
-        // { name: '河北', value: 1543 },
-        // { name: '河南', value: 843 },
-        // { name: '云南', value: 151 },
-        // { name: '辽宁', value: 19 },
-        // { name: '黑龙江', value: 15 },
-        // { name: '湖南', value: 69 },
-        // { name: '安徽', value: 60 },
-        // { name: '山东', value: 39 },
-        // { name: '新疆', value: 2 },
-        // { name: '江苏', value: 3551 },
-        // { name: '浙江', value: 104 },
-        // { name: '江西', value: 36 },
-        // { name: '湖北', value: 1052 },
-        // { name: '广西', value: 33 },
-        // { name: '甘肃', value: 744 },
-        // { name: '山西', value: 93 },
-        // { name: '内蒙古', value: 7 },
-        // { name: '陕西', value: 22 },
-        // { name: '吉林', value: 4 },
-        // { name: '福建', value: 18 },
-        // { name: '贵州', value: 5 },
-        // { name: '广东', value: 98 },
-        // { name: '青海', value: 145 },
-        // { name: '西藏', value: 0 },
-        // { name: '四川', value: 44 },
-        // { name: '宁夏', value: 4554 },
-        // { name: '海南', value: 22 },
-        // { name: '台湾', value: 3 },
-        // { name: '香港', value: 5 },
-        // { name: '澳门', value: 5 },
-      ],
-    };
+    return {};
+  },
+  props: {
+    dataList: { type: Array, default: () => [] },
+    isNow: { type: Boolean, default: false },
   },
   created() {},
   methods: {
     initChart() {
+      // console.log(this.dataList, 'u8u811111');
       // 获取存放地图的dom元素
       let myChart = echarts.init(this.$refs.chart);
       // 指定图表的配置项和数据
       let option = {
         // 地图标题
         title: {
-          text: '中国疫情地图',
+          text: `${this.isNow ? '现有确诊' : '新增确诊'}`,
           x: 'center',
         },
         // 放上鼠标后显示的新
@@ -151,7 +118,7 @@ export default {
             },
             {
               value: 0,
-              color: '#c7fffd',
+              color: '#ffffff',
               symbol: 'roundRect',
             },
           ],
@@ -161,22 +128,9 @@ export default {
       // 使用刚指定的配置项和数据显示图表。
       myChart.setOption(option);
     },
-    async getMapData() {
-      const res = await this.$axios.get('api/china/map');
-      if (res.code === 200) {
-        let temp = res.message;
-        for (let i = 0; i < temp.length; i++) {
-          this.dataList.push({
-            name: temp[i].city,
-            value: temp[i].confirm_now,
-          });
-        }
-      }
-    },
   },
   mounted() {
-    this.getMapData();
-    this.initChart();
+    // this.initChart();
   },
 };
 </script>
