@@ -18,11 +18,39 @@
       <div class="diagram-map">
         <foreign-map ref="map2" :dataList="dataListAdd" isNow></foreign-map>
       </div>
+      <div class="diagram-map">
+        <trend-diagram
+          ref="trend1"
+          :date="date"
+          :data="confirmAddData"
+          :data1="confirmNowData"
+          :data2="confirmedData"
+          title="确诊趋势"
+          name="新增确诊"
+          name1="现有确诊"
+          name2="累计确诊"
+          color="#ee735f"
+          color2="#811d17"
+        ></trend-diagram>
+      </div>
+      <div class="diagram-map">
+        <trend-diagram
+          ref="trend2"
+          :date="date"
+          :data="curedData"
+          :data1="diedData"
+          title="治愈/死亡趋势"
+          name="累计治愈"
+          name1="累计死亡"
+          color="#ee735f"
+        ></trend-diagram>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import ForeignMap from '@/components/ForeignMap.vue';
+import TrendDiagram from '@/components/TrendDiagram.vue';
 
 export default {
   data() {
@@ -32,14 +60,22 @@ export default {
       lastData: {},
       dataListNow:[],
       dataListAdd:[],
+      date:[],
+      confirmAddData:[],
+      confirmNowData:[],
+      confirmedData:[],
+      curedData:[],
+      diedData:[],
     };
   },
   components: {
     ForeignMap,
+    TrendDiagram
   },
   created() {
     this.getHeadData();
     this.getMapData();
+    this.getTrendData();
   },
   methods: {
     async getHeadData() {
@@ -93,6 +129,24 @@ export default {
       }
       this.$refs.map1.initChart();
       this.$refs.map2.initChart();
+    },
+    async getTrendData() {
+      const res = await this.$axios.get('api/aborad/trend');
+      if (res.code === 200) {
+        this.dataList = res.message;
+        for (let i = 0; i < res.message.length; i++) {
+          let temp = res.message[i].update_date;
+          temp = temp.slice(5, 10);
+          this.date.push(temp);
+          this.confirmAddData.push(res.message[i].confirm_add);
+          this.confirmNowData.push(res.message[i].confirm_now);
+          this.confirmedData.push(res.message[i].confirmed);
+          this.curedData.push(res.message[i].crued);
+          this.diedData.push(res.message[i].died);
+        }
+      }
+      this.$refs.trend1.initChart();
+      this.$refs.trend2.initChart();
     },
   },
 };

@@ -16,6 +16,7 @@ const router = new Router({
       path: '/',
       name: 'home',
       component: Home,
+      redirect: { name: '总体趋势' },
       children:[
         {
           path:'/china/total',

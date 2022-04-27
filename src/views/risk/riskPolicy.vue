@@ -1,13 +1,33 @@
 <template>
-  <div>出行政策查询模块</div>
+  <div class="policy">
+    <h3>出行政策查询模块</h3>
+    <el-button
+      type="primary"
+      icon="el-icon-search"
+      @click="search"
+    >点击查询</el-button>
+  </div>
 </template>
 <script>
 export default {
   data() {
-     return {}
-   },
-   created() {},
-   methods: {}
-}
+    return {
+      url:'https://wx.wind.com.cn/unitedweb/cmsapp/Sites/TravelPolicy/index.html#/'
+    };
+  },
+  created() {},
+  methods: {
+    search(){
+      window.location.href = this.url;
+    }
+  },
+};
 </script>
-<style></style>
+<style lang="scss" scoped>
+.policy {
+  h3 {
+    font-size: 20px;
+    margin: 25px;
+  }
+}
+</style>

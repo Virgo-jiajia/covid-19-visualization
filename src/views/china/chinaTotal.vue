@@ -13,32 +13,70 @@
     </div>
     <div class="total-diagram">
       <div class="diagram-map">
-        <china-map ref="map1" :dataList="dataListNow" isNow></china-map>
+        <china-map
+          ref="map1"
+          :dataList="dataListNow"
+          isNow
+        ></china-map>
       </div>
       <div class="diagram-map">
-        <china-map ref="map2" :dataList="dataListAdd"></china-map>
+        <china-map
+          ref="map2"
+          :dataList="dataListAdd"
+        ></china-map>
       </div>
       <div class="diagram-map">
-        <trend-local-add></trend-local-add>
+        <trend-diagram
+          ref="trend1"
+          :date="date"
+          :data="localAddData"
+          title="新增本土趋势"
+          name="新增本土"
+          color="#ee735f"
+        ></trend-diagram>
       </div>
       <div class="diagram-map">
-        <trend-oversea-add></trend-oversea-add>
+        <trend-diagram
+          ref="trend2"
+          :date="date"
+          :data="overseaAddData"
+          title="境外输入新增趋势"
+          name="新增境外输入"
+          color="#811d17"
+        ></trend-diagram>
       </div>
       <div class="diagram-map">
-        <trend-add></trend-add>
+        <trend-diagram
+          ref="trend3"
+          :date="date"
+          :data="confirmAdd"
+          :data1="overseaAdd"
+          title="全国疫情新增趋势"
+          name="新增确诊"
+          name1="新增境外输入"
+          color="#ee735f"
+          color1="#4e6d9c"
+        ></trend-diagram>
       </div>
       <div class="diagram-map">
-        <trend-crued-died></trend-crued-died>
+        <trend-diagram
+          ref="trend4"
+          :date="date"
+          :data="crued"
+          :data1="died"
+          title="全国累计治愈/死亡趋势"
+          name="累计治愈"
+          name1="累计死亡"
+          color="#4eabb3"
+          color1="#4d5054"
+        ></trend-diagram>
       </div>
     </div>
   </div>
 </template>
 <script>
-import TrendLocalAdd from '@/components/TrendLocalAdd.vue';
+import TrendDiagram from '@/components/TrendDiagram.vue';
 import ChinaMap from '../../components/ChinaMap.vue';
-import TrendOverseaAdd from '@/components/TrendOverseaAdd.vue';
-import TrendAdd from '@/components/TrendAdd.vue';
-import TrendCruedDied from '@/components/TrendCruedDied.vue';
 
 export default {
   data() {
@@ -46,23 +84,27 @@ export default {
       digitData: [],
       total: [],
       lastData: {},
-      dataListNow:[],
-      dataListAdd:[],
+      dataListNow: [],
+      dataListAdd: [],
+      date: [],
+      localAddData: [],
+      overseaAddData: [],
+      confirmAdd: [],
+      overseaAdd: [],
+      crued:[],
+      died:[]
     };
   },
   components: {
     ChinaMap,
-    TrendLocalAdd,
-    TrendOverseaAdd,
-    TrendAdd,
-    TrendCruedDied,
+    TrendDiagram,
   },
   created() {
     this.getHeadData();
     this.getMapData();
+    this.getTrendData();
   },
   methods: {
-    // 'https://interface.sina.cn/news/wap/fymap2020_data.d.json'
     async getHeadData() {
       const res = await this.$axios.get('api/china/total');
       if (res.code === 200) {
@@ -72,27 +114,27 @@ export default {
           {
             title: '现有确诊',
             number: this.lastData.confirm_now,
-            color:'#ee735f'
+            color: '#ee735f',
           },
           {
             title: '累计确诊',
             number: this.lastData.confirmed,
-            color:'#d7433c'
+            color: '#d7433c',
           },
           {
             title: '新增确诊',
             number: this.lastData.confirm_add,
-            color:'#da7352'
+            color: '#da7352',
           },
           {
             title: '累计治愈',
             number: this.lastData.cured,
-            color:'#4eabb3'
+            color: '#4eabb3',
           },
           {
             title: '累计死亡',
             number: this.lastData.died,
-            color:'#4e6d9c'
+            color: '#4e6d9c',
           },
         );
       }
@@ -115,6 +157,27 @@ export default {
       this.$refs.map1.initChart();
       this.$refs.map2.initChart();
     },
+    async getTrendData() {
+      const res = await this.$axios.get('api/trend/trends');
+      if (res.code === 200) {
+        this.dataList = res.message;
+        for (let i = 0; i < res.message.length; i++) {
+          let temp = res.message[i].update_date;
+          temp = temp.slice(5, 10);
+          this.date.push(temp);
+          this.localAddData.push(res.message[i].local_add);
+          this.overseaAddData.push(res.message[i].oversea_add);
+          this.confirmAdd.push(res.message[i].confirm_add);
+          this.overseaAdd.push(res.message[i].oversea_add);
+          this.crued.push(res.message[i].crued);
+          this.died.push(res.message[i].died);
+        }
+      }
+      this.$refs.trend1.initChart();
+      this.$refs.trend2.initChart();
+      this.$refs.trend3.initChart();
+      this.$refs.trend4.initChart();
+    },
   },
 };
 </script>
@@ -122,7 +185,7 @@ export default {
 .total {
   padding: 10px;
   .total-digit {
-    width:1200px;
+    width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -143,7 +206,7 @@ export default {
     }
   }
   .total-diagram {
-    width:1200px;
+    width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
