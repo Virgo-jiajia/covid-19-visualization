@@ -2,7 +2,7 @@
   <div>
     <el-container class="main-container">
       <el-header>
-        <p>疫情数据平台</p>
+        <p style="fontSize:16px">疫情数据平台</p>
       </el-header>
       <el-container>
         <el-aside width="200px">

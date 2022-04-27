@@ -1,6 +1,6 @@
 <template>
   <div class="policy">
-    <h3>出行政策查询模块</h3>
+    <h3>出行政策查询</h3>
     <el-button
       type="primary"
       icon="el-icon-search"
