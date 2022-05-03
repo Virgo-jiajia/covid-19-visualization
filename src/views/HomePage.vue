@@ -16,7 +16,7 @@
             <el-submenu index="1-1">
               <template slot="title">
                 <i class="el-icon-data-line"></i>
-                <span>国内趋势</span>
+                <span>国内疫情</span>
               </template>
               <el-menu-item index="/china/total">总体趋势</el-menu-item>
               <el-menu-item index="/china/data">数据概览</el-menu-item>
@@ -25,7 +25,7 @@
             <el-submenu index="1-2">
               <template slot="title">
                 <i class="el-icon-s-marketing"></i>
-                <span>国外趋势</span>
+                <span>国外疫情</span>
               </template>
               <el-menu-item index="/abroad/total">总体趋势</el-menu-item>
             </el-submenu>

@@ -16,7 +16,7 @@
         <foreign-map ref="map1" :dataList="dataListNow" isNow></foreign-map>
       </div>
       <div class="diagram-map">
-        <foreign-map ref="map2" :dataList="dataListAdd" isNow></foreign-map>
+        <foreign-map ref="map2" :dataList="dataListAdd"></foreign-map>
       </div>
       <div class="diagram-map">
         <trend-diagram
